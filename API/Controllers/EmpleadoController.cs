@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Dtos;
+using API.Helpers;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
@@ -103,12 +106,14 @@ namespace API.Controllers
             return NoContent();
         }
 
-        [HttpGet("empleados")] // 2611
+        [HttpGet("empleados"), Authorize] // 2611
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<IEnumerable<EmpleadoNombreDto>>> GetEmpleados()
+        public async Task<ActionResult<IEnumerable<EmpleadoNombreDto>>> GetEmpleados([FromQuery]PaginacionDto paginacionDto) //esto a partir de ahora se le pedirá al usuario
         {
-            var results = await _unitOfWork.Empleados.GetEmpleados();
+            var queryable = _unitOfWork.Empleados.GetEmpleados();
+            await HttpContext.InsertPaginationHeader(queryable);
+            var results = await queryable.OrderBy(x => x.Id).Paginate(paginacionDto).ToListAsync(); //es recomendable ordenar cuando se pagina
             return _mapper.Map<List<EmpleadoNombreDto>>(results);
         }
 

@@ -61,7 +61,7 @@ app.MapGet("/login", (string username) =>
         var claimsPrincipal = new ClaimsPrincipal(
         new ClaimsIdentity(
             new[] { new Claim(ClaimTypes.Name, username)},
-            BearerTokenDefaults.AuthenticationScheme  //👈
+            BearerTokenDefaults.AuthenticationScheme
         )
         );
 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Domain.Entities;
 using Domain.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Data;
 
@@ -18,10 +19,9 @@ namespace Application.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Empleado>> GetEmpleados()
+        public IQueryable<Empleado> GetEmpleados()
         {
-            return await _context.Empleados
-                        .ToListAsync();
+            return _context.Empleados.AsQueryable();
         }
 
         public async Task<List<Empleado>> GetEmpleadosVigilantes()

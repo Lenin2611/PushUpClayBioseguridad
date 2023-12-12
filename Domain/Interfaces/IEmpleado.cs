@@ -8,7 +8,7 @@ namespace Domain.Interfaces
 {
     public interface IEmpleado : IGenericRepository<Empleado>
     {
-        Task<IEnumerable<Empleado>> GetEmpleados();
+        IQueryable<Empleado> GetEmpleados();
         Task<List<Empleado>> GetEmpleadosVigilantes();
         Task<List<object>> GetContactoEmpleadosVigilantes();
         Task<List<Empleado>> GetEmpleadosGironPiedecuesta();
